@@ -22,19 +22,19 @@ import Base from '../layouts/Base.astro';
       <div class="panel" id="labPanel" hidden>
         <div class="row"><span>Type</span>
           <span class="opts" data-k="type">
-            <button data-v="bayer" class="on">Bayer</button>
-            <button data-v="diffusion">Error Diffusion</button>
+            <button data-v="bayer">Bayer</button>
+            <button data-v="diffusion" class="on">Error Diffusion</button>
           </span>
         </div>
         <div class="row"><span>Bayer Matrix</span>
           <span class="opts" data-k="matrix">
-            <button data-v="4" class="on">4×4</button>
-            <button data-v="8">8×8</button>
+            <button data-v="4">4×4</button>
+            <button data-v="8" class="on">8×8</button>
           </span>
         </div>
-        <div class="row"><span>Dither</span><input type="range" data-k="dither" min="0" max="100" value="80" /></div>
-        <div class="row"><span>Pixel Size</span><input type="range" data-k="px" min="1" max="8" value="2" /></div>
-        <div class="row"><span>Exposure</span><input type="range" data-k="exposure" min="-60" max="60" value="15" /></div>
+        <div class="row"><span>Dither</span><input type="range" data-k="dither" min="0" max="100" value="55" /></div>
+        <div class="row"><span>Pixel Size</span><input type="range" data-k="px" min="1" max="8" value="1" /></div>
+        <div class="row"><span>Exposure</span><input type="range" data-k="exposure" min="-60" max="60" value="5" /></div>
       </div>
       <div class="bar">
         <span class="chips" id="labChips"></span>
@@ -143,13 +143,13 @@ import Base from '../layouts/Base.astro';
   ];
 
   const state = {
-    palette: 0,
+    palette: 1,
     original: false,
-    type: 'bayer' as 'bayer' | 'diffusion',
-    matrix: 4,
-    dither: 80,
-    px: 2,
-    exposure: 15,
+    type: 'diffusion' as 'bayer' | 'diffusion',
+    matrix: 8,
+    dither: 55,
+    px: 1,
+    exposure: 5,
   };
 
   const BAYER4 = [
@@ -237,7 +237,7 @@ import Base from '../layouts/Base.astro';
     b.style.setProperty('--s', `linear-gradient(135deg, ${pal.dark} 50%, ${pal.light} 50%)`);
     b.style.background = `linear-gradient(135deg, ${pal.dark} 50%, ${pal.light} 50%)`;
     b.title = pal.name;
-    if (idx === 0) b.classList.add('on');
+    if (idx === 1) b.classList.add('on');
     b.addEventListener('click', () => {
       state.palette = idx;
       state.original = false;
@@ -261,7 +261,7 @@ import Base from '../layouts/Base.astro';
     nameEl.textContent = 'Original';
   });
   chipsBox.appendChild(orig);
-  nameEl.textContent = PALETTES[0].name;
+  nameEl.textContent = PALETTES[1].name;
 
   // gear + controls
   document.getElementById('labGear')!.addEventListener('click', () => {
