@@ -1,0 +1,107 @@
+---
+// About — Stamatiou-style: big hello, duotone portrait with switchable color
+// overlays (click a swatch; "original" restores the photo). Body copy is
+// LOREM IPSUM placeholder until Dustin writes the real thing.
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="About — Dustin Mooney" description="About Dustin Mooney.">
+  <section style="margin-top: 4rem;">
+    <h1>Hello</h1>
+    <p class="meta" style="font-size: 1.15rem; margin-top: 0.5rem;">
+      I'm Dustin Mooney.
+    </p>
+  </section>
+
+  <figure class="duo-wrap" id="duo">
+    <div class="duo">
+      <img src="/images/about-nyc.jpg" alt="Dustin Mooney at Top of the Rock, New York City, with the Empire State Building behind" loading="eager" />
+    </div>
+    <figcaption>
+      <span class="meta">Top of the Rock, New York City.</span>
+      <span class="swatches" role="group" aria-label="Photo tint">
+        <button data-c="#2451cf" style="--s:#2451cf" title="Blue"></button>
+        <button data-c="#b4552d" style="--s:#b4552d" title="Rust"></button>
+        <button data-c="#2d7a4f" style="--s:#2d7a4f" title="Green"></button>
+        <button data-c="#6d4fa3" style="--s:#6d4fa3" title="Violet"></button>
+        <button data-c="original" class="orig" title="Original">◯</button>
+      </span>
+    </figcaption>
+  </figure>
+
+  <div class="prose" style="margin-top: 1.5rem;">
+    <p><em>(Placeholder copy — the real bio is on its way.)</em></p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere
+    erat a ante venenatis dapibus posuere velit aliquet. Cras justo odio,
+    dapibus ac facilisis in, egestas eget quam. Donec ullamcorper nulla non
+    metus auctor fringilla, sed posuere consectetur est at lobortis.</p>
+    <h2>Now</h2>
+    <p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus
+    mollis interdum. Aenean lacinia bibendum nulla sed consectetur. Nullam quis
+    risus eget urna mollis ornare vel eu leo.</p>
+    <h2>Before</h2>
+    <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
+    ridiculus mus. Duis mollis, est non commodo luctus, nisi erat porttitor
+    ligula, eget lacinia odio sem nec elit. Sed posuere consectetur est at
+    lobortis.</p>
+    <h2>Elsewhere</h2>
+    <p>Find me by <a href="mailto:dustin@dustinmooney.com">email</a>, on
+    <a href="https://linkedin.com/in/dustinmooney">LinkedIn</a>, or subscribe to
+    the <a href="/rss.xml">RSS feed</a>.</p>
+  </div>
+</Base>
+
+<style>
+  .duo-wrap { margin: 2.2rem 0 0; }
+  .duo {
+    background: var(--duo, #2451cf);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .duo img {
+    display: block;
+    width: 100%;
+    border-radius: 0;
+    filter: grayscale(1) contrast(1.06) brightness(1.06);
+    mix-blend-mode: multiply;
+    transition: filter 0.3s;
+  }
+  /* "original" state — the photo as shot */
+  .duo-wrap.original .duo { background: transparent; }
+  .duo-wrap.original .duo img { filter: none; mix-blend-mode: normal; }
+
+  figcaption {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; margin-top: 0.7rem; flex-wrap: wrap;
+  }
+  .swatches { display: flex; gap: 0.45rem; align-items: center; }
+  .swatches button {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid var(--rule); background: var(--s);
+    cursor: pointer; padding: 0;
+    color: var(--text-dim); font-size: 0.8rem; line-height: 1;
+  }
+  .swatches button:hover { transform: scale(1.15); }
+  .swatches button.active { border-color: var(--text); }
+  .swatches .orig { background: transparent; }
+</style>
+
+<script>
+  const wrap = document.getElementById('duo');
+  const buttons = wrap?.querySelectorAll('.swatches button') ?? [];
+  buttons.forEach((b) => {
+    b.addEventListener('click', () => {
+      buttons.forEach((x) => x.classList.remove('active'));
+      b.classList.add('active');
+      const c = b.getAttribute('data-c');
+      if (c === 'original') {
+        wrap?.classList.add('original');
+      } else {
+        wrap?.classList.remove('original');
+        wrap?.style.setProperty('--duo', c);
+      }
+    });
+  });
+  buttons[0]?.classList.add('active');
+</script>

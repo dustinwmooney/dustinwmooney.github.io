@@ -72,6 +72,37 @@ blockquote {
 
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 1.35rem; }
 
+/* Icon rail (desktop) — Stamatiou-style fixed left navigation */
+.rail { display: none; }
+@media (min-width: 920px) {
+  .rail {
+    position: fixed;
+    left: max(1.2rem, calc(50vw - var(--max) / 2 - 5.5rem));
+    top: 40vh;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    z-index: 10;
+  }
+  .rail a {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    color: var(--text-dim);
+    transition: background 0.15s, color 0.15s;
+  }
+  .rail a:hover { background: var(--card); color: var(--text); text-decoration: none; }
+  .rail a[aria-current='page'] { background: var(--text); color: var(--bg); }
+  .rail svg { width: 21px; height: 21px; }
+  .site-nav a:not(.brand) { display: none; }
+}
+.sr {
+  position: absolute; width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+
 /* Site chrome */
 .site-nav {
   display: flex; align-items: baseline; gap: 1.4rem;
