@@ -1,0 +1,95 @@
+---
+// M31.e — newsletter subscribe. Posts directly to Kit's form endpoint (no
+// ck.js widget, so no "Built with Kit" badge and no pop-up behavior). Styled
+// to match the site; submits via fetch so the page never navigates away.
+interface Props { heading?: string; blurb?: string }
+const {
+  heading = 'Subscribe',
+  blurb = 'New writing in your inbox — occasionally, never spam.',
+} = Astro.props;
+const ACTION = 'https://app.kit.com/forms/9675684/subscriptions';
+---
+<section class="subscribe" aria-label="Newsletter signup">
+  <div>
+    <h3>{heading}</h3>
+    <p class="meta">{blurb}</p>
+  </div>
+  <form class="sub-form" action={ACTION} method="post">
+    <input type="email" name="email_address" required placeholder="you@example.com" aria-label="Email address" autocomplete="email" />
+    <button type="submit">Subscribe</button>
+    <p class="sub-msg" role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+<style>
+  .subscribe {
+    margin: 3rem 0 0;
+    padding: 1.5rem 1.6rem;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: var(--card);
+    display: grid;
+    gap: 1rem;
+  }
+  .subscribe h3 { font-family: var(--serif); }
+  .subscribe .meta { margin: 0.3rem 0 0; }
+  .sub-form { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: flex-start; }
+  .sub-form input {
+    flex: 1 1 220px;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 0.6rem 0.75rem;
+  }
+  .sub-form input:focus { outline: none; border-color: var(--accent); }
+  .sub-form button {
+    font: inherit; font-weight: 600;
+    border: none; cursor: pointer;
+    background: var(--accent); color: var(--bg);
+    border-radius: 10px; padding: 0.6rem 1.15rem;
+  }
+  .sub-form button:hover { filter: brightness(1.08); }
+  .sub-form button:disabled { opacity: 0.6; cursor: default; }
+  .sub-msg { flex-basis: 100%; margin: 0; font-size: 0.9rem; min-height: 1em; }
+  .sub-msg.ok { color: #2d7a4f; }
+  .sub-msg.err { color: #c0492b; }
+  @media (prefers-color-scheme: dark) { .sub-msg.ok { color: #7fd0a1; } .sub-msg.err { color: #ff9b82; } }
+</style>
+
+<script>
+  // Submit in the background so the visitor stays on the page. Kit's endpoint
+  // accepts a urlencoded POST and returns JSON; a network hiccup falls back to
+  // a normal form submit so a subscription is never silently lost.
+  document.querySelectorAll<HTMLFormElement>('.sub-form').forEach((form) => {
+    const msg = form.querySelector('.sub-msg') as HTMLElement;
+    const btn = form.querySelector('button') as HTMLButtonElement;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = (form.querySelector('input[name=email_address]') as HTMLInputElement).value;
+      msg.className = 'sub-msg';
+      msg.textContent = '';
+      btn.disabled = true;
+      btn.textContent = 'Subscribing…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
+          body: new URLSearchParams({ email_address: email }),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        msg.className = 'sub-msg ok';
+        msg.textContent = 'Thanks! Check your email to confirm.';
+        form.reset();
+      } catch {
+        // Fall back to a full-page native submit (Kit shows its own success).
+        form.submit();
+        return;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Subscribe';
+      }
+    });
+  });
+</script>

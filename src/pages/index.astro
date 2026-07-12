@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Subscribe from '../components/Subscribe.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('writing', ({ data }) => !data.draft))
@@ -47,4 +48,6 @@ const fmt = (d: Date) =>
     </ul>
     <p style="margin-top: 1rem;"><a href="/writing/">All writing →</a></p>
   </section>
+
+  <Subscribe />
 </Base>
