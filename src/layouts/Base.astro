@@ -53,6 +53,23 @@ const nav = [
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd ?? person)} />
+    <script is:inline>
+      // Theme, applied before paint. Explicit choice wins; OS preference otherwise.
+      (function () {
+        const saved = localStorage.getItem('theme');
+        const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved) document.documentElement.dataset.theme = saved;
+        document.documentElement.classList.toggle('dark-active', dark);
+      })();
+      function toggleTheme() {
+        const dark = !document.documentElement.classList.contains('dark-active');
+        const mode = dark ? 'dark' : 'light';
+        document.documentElement.dataset.theme = mode;
+        document.documentElement.classList.toggle('dark-active', dark);
+        localStorage.setItem('theme', mode);
+        dispatchEvent(new CustomEvent('themechange'));
+      }
+    </script>
   </head>
   <body>
     <aside class="rail" aria-label="Site navigation">
@@ -64,6 +81,15 @@ const nav = [
           <span class="sr">{n.label}</span>
         </a>
       ))}
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 13A8 8 0 1 1 11 4a6.5 6.5 0 0 0 9 9Z" />
+        </svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.5" /><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M4.7 4.7l1.8 1.8M17.5 17.5l1.8 1.8M19.3 4.7l-1.8 1.8M6.5 17.5l-1.8 1.8" />
+        </svg>
+        <span class="sr">Toggle theme</span>
+      </button>
     </aside>
     <div class="wrap">
       <nav class="site-nav">
@@ -71,6 +97,15 @@ const nav = [
         <a href="/writing/" aria-current={at('/writing/')}>Writing</a>
         <a href="/about/" aria-current={at('/about/')}>About</a>
         <a href="/resume/" aria-current={at('/resume/')}>Resume</a>
+        <button class="theme-toggle nav-toggle" onclick="toggleTheme()" title="Toggle theme">
+          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 13A8 8 0 1 1 11 4a6.5 6.5 0 0 0 9 9Z" />
+          </svg>
+          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5" /><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M4.7 4.7l1.8 1.8M17.5 17.5l1.8 1.8M19.3 4.7l-1.8 1.8M6.5 17.5l-1.8 1.8" />
+          </svg>
+          <span class="sr">Toggle theme</span>
+        </button>
       </nav>
       <slot />
       <footer class="site-footer">

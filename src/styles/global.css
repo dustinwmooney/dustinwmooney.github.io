@@ -16,8 +16,10 @@
   --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 }
 
+/* Dark palette applies via OS preference (unless overridden to light) or the
+   explicit toggle. The toggle stamps data-theme on <html>. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #101218;
     --text: #e8eaf2;
     --text-dim: #9aa1b5;
@@ -27,6 +29,19 @@
     --card: rgba(232, 234, 242, 0.05);
   }
 }
+:root[data-theme='dark'] {
+  --bg: #101218;
+  --text: #e8eaf2;
+  --text-dim: #9aa1b5;
+  --accent: #8fa8ff;
+  --accent-soft: rgba(143, 168, 255, 0.12);
+  --rule: rgba(232, 234, 242, 0.14);
+  --card: rgba(232, 234, 242, 0.05);
+}
+.theme-toggle .sun { display: none; }
+.theme-toggle .moon { display: block; }
+html.dark-active .theme-toggle .sun { display: block; }
+html.dark-active .theme-toggle .moon { display: none; }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -84,20 +99,31 @@ blockquote {
     gap: 0.4rem;
     z-index: 10;
   }
-  .rail a {
+  .rail a, .rail button {
     display: grid;
     place-items: center;
     width: 44px;
     height: 44px;
     border-radius: 12px;
     color: var(--text-dim);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
     transition: background 0.15s, color 0.15s;
   }
-  .rail a:hover { background: var(--card); color: var(--text); text-decoration: none; }
+  .rail a:hover, .rail button:hover { background: var(--card); color: var(--text); text-decoration: none; }
   .rail a[aria-current='page'] { background: var(--text); color: var(--bg); }
   .rail svg { width: 21px; height: 21px; }
-  .site-nav a:not(.brand) { display: none; }
+  .rail .theme-toggle { margin-top: 0.8rem; }
+  .site-nav a:not(.brand), .site-nav .nav-toggle { display: none; }
 }
+.nav-toggle {
+  background: none; border: none; cursor: pointer; padding: 2px;
+  color: var(--text-dim); width: 26px; height: 26px; align-self: center;
+}
+.nav-toggle svg { width: 19px; height: 19px; }
+.nav-toggle:hover { color: var(--accent); }
 .sr {
   position: absolute; width: 1px; height: 1px;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
