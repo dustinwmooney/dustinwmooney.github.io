@@ -54,12 +54,12 @@ const nav = [
     <meta name="twitter:card" content="summary" />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd ?? person)} />
     <script is:inline>
-      // Theme, applied before paint. Explicit choice wins; OS preference otherwise.
+      // Theme, applied before paint. Explicit choice wins; the site defaults
+      // to DARK otherwise (Dustin, 2026-07-12) — OS preference no longer read.
       (function () {
-        const saved = localStorage.getItem('theme');
-        const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-        if (saved) document.documentElement.dataset.theme = saved;
-        document.documentElement.classList.toggle('dark-active', dark);
+        const mode = localStorage.getItem('theme') ?? 'dark';
+        document.documentElement.dataset.theme = mode;
+        document.documentElement.classList.toggle('dark-active', mode === 'dark');
       })();
       function toggleTheme() {
         const dark = !document.documentElement.classList.contains('dark-active');
@@ -81,6 +81,12 @@ const nav = [
           <span class="sr">{n.label}</span>
         </a>
       ))}
+      <button class="search-open" onclick="openSearch()" title="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5" /><path d="m20 20-4.4-4.4" />
+        </svg>
+        <span class="sr">Search</span>
+      </button>
       <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
         <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M20 13A8 8 0 1 1 11 4a6.5 6.5 0 0 0 9 9Z" />
@@ -97,6 +103,12 @@ const nav = [
         <a href="/writing/" aria-current={at('/writing/')}>Writing</a>
         <a href="/about/" aria-current={at('/about/')}>About</a>
         <a href="/resume/" aria-current={at('/resume/')}>Resume</a>
+        <button class="search-open nav-toggle" onclick="openSearch()" title="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5" /><path d="m20 20-4.4-4.4" />
+          </svg>
+          <span class="sr">Search</span>
+        </button>
         <button class="theme-toggle nav-toggle" onclick="toggleTheme()" title="Toggle theme">
           <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M20 13A8 8 0 1 1 11 4a6.5 6.5 0 0 0 9 9Z" />
@@ -107,7 +119,9 @@ const nav = [
           <span class="sr">Toggle theme</span>
         </button>
       </nav>
-      <slot />
+      <main data-pagefind-body>
+        <slot />
+      </main>
       <footer class="site-footer">
         <span>© 2026 Dustin Mooney</span>
         <a href="/rss.xml">RSS</a>
@@ -115,5 +129,79 @@ const nav = [
         <a href="https://linkedin.com/in/dustinmooney">LinkedIn</a>
       </footer>
     </div>
+
+    <div id="search-overlay" hidden>
+      <div class="search-backdrop" onclick="closeSearch()"></div>
+      <div class="search-box" role="dialog" aria-modal="true" aria-label="Search the site">
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search writing, about, resume…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <ol id="search-results"></ol>
+        <p id="search-status" class="search-status"></p>
+      </div>
+    </div>
+    <script is:inline>
+      // Site search: Pagefind indexes the built site; this lazy-loads the
+      // index on first open, so pages carry zero search JS until asked.
+      let pagefind = null;
+      let searchSeq = 0;
+
+      function openSearch() {
+        const overlay = document.getElementById('search-overlay');
+        overlay.hidden = false;
+        document.getElementById('search-input').focus();
+      }
+      function closeSearch() {
+        document.getElementById('search-overlay').hidden = true;
+        document.getElementById('search-input').blur();
+      }
+
+      addEventListener('keydown', (e) => {
+        const overlay = document.getElementById('search-overlay');
+        if (e.key === 'Escape' && !overlay.hidden) closeSearch();
+        const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement?.tagName ?? '');
+        if ((e.key === '/' && !typing) || ((e.metaKey || e.ctrlKey) && e.key === 'k')) {
+          e.preventDefault();
+          overlay.hidden ? openSearch() : closeSearch();
+        }
+      });
+
+      document.getElementById('search-input').addEventListener('input', async (e) => {
+        const q = e.target.value.trim();
+        const list = document.getElementById('search-results');
+        const status = document.getElementById('search-status');
+        const seq = ++searchSeq;
+        if (!q) {
+          list.innerHTML = '';
+          status.textContent = '';
+          return;
+        }
+        try {
+          if (!pagefind) {
+            pagefind = await import('/pagefind/pagefind.js');
+            await pagefind.init();
+          }
+        } catch {
+          status.textContent = 'Search is being indexed — try again after the next publish.';
+          return;
+        }
+        const res = await pagefind.debouncedSearch(q);
+        if (!res || seq !== searchSeq) return; // superseded by newer keystrokes
+        const hits = await Promise.all(res.results.slice(0, 8).map((r) => r.data()));
+        if (seq !== searchSeq) return;
+        list.innerHTML = hits
+          .map(
+            (h) =>
+              `<li><a href="${h.url}"><strong>${h.meta?.title ?? h.url}</strong>` +
+              `<span>${h.excerpt}</span></a></li>`
+          )
+          .join('');
+        status.textContent = hits.length ? '' : `Nothing found for “${q}”.`;
+      });
+    </script>
   </body>
 </html>

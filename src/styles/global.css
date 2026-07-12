@@ -1,4 +1,4 @@
-/* Design system — typography-first, light by default, dark by preference.
+/* Design system — typography-first, DARK by default (Dustin, 2026-07-12), light by explicit toggle.
    Inspiration: paulstamatiou.com (art direction), steipete.me (clean feed),
    darioamodei.com (restraint). No external fonts: fast beats fancy. */
 
@@ -179,3 +179,50 @@ blockquote {
   border-radius: 10px; padding: 0.55rem 1.1rem;
 }
 .btn:hover { text-decoration: none; filter: brightness(1.08); }
+
+/* Site search overlay (Pagefind). Same palette variables as everything else,
+   so it follows the theme for free. */
+#search-overlay { position: fixed; inset: 0; z-index: 60; }
+.search-backdrop {
+  position: absolute; inset: 0;
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  backdrop-filter: blur(3px);
+}
+.search-box {
+  position: relative;
+  margin: 12vh auto 0;
+  width: min(34rem, calc(100vw - 2rem));
+  max-height: 70vh;
+  overflow-y: auto;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 0.9rem;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+}
+#search-input {
+  width: 100%;
+  font: inherit;
+  font-size: 1.1rem;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 9px;
+  padding: 0.55rem 0.8rem;
+  outline: none;
+}
+#search-input:focus { border-color: var(--accent); }
+#search-results { list-style: none; margin: 0.6rem 0 0; padding: 0; }
+#search-results li + li { margin-top: 0.35rem; }
+#search-results a {
+  display: block;
+  padding: 0.55rem 0.7rem;
+  border-radius: 9px;
+  text-decoration: none;
+  color: var(--text);
+}
+#search-results a:hover { background: var(--accent-soft); }
+#search-results strong { display: block; font-family: var(--serif); }
+#search-results span { display: block; font-size: 0.86rem; color: var(--text-dim); }
+#search-results mark { background: var(--accent-soft); color: var(--accent); border-radius: 3px; }
+.search-status { margin: 0.6rem 0.2rem 0.1rem; font-size: 0.86rem; color: var(--text-dim); }
