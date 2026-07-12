@@ -1,0 +1,18 @@
+# Dustin Mooney
+
+> Personal site of Dustin Mooney — customer success and strategy leader
+> (currently Solutions Strategist at General Motors). Resume, essays, and
+> feature writing.
+
+## Pages
+
+- [Home](https://dustinwmooney.github.io/): bio and recent writing
+- [Resume](https://dustinwmooney.github.io/resume/): full experience, education, skills
+- [Resume PDF](https://dustinwmooney.github.io/files/resume.pdf): canonical downloadable resume
+- [Writing](https://dustinwmooney.github.io/writing/): all essays, features, and links
+- [RSS](https://dustinwmooney.github.io/rss.xml): machine-readable feed of all writing
+
+## Contact
+
+- Email: dustin@mooney.me
+- LinkedIn: https://linkedin.com/in/dustinmooney

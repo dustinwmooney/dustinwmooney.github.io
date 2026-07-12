@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 6);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+---
+
+<Base title="Dustin Mooney">
+  <section style="margin-top: 4.5rem;">
+    <h1>Dustin Mooney</h1>
+    <!-- BIO PLACEHOLDER — Dustin is sending real copy; everything below this
+         line in this block gets replaced verbatim when it arrives. -->
+    <p class="meta" style="max-width: 36rem; margin-top: 1.1rem; font-size: 1.05rem;">
+      Customer success and strategy leader — currently a Solutions Strategist at
+      General Motors. A decade and a half of building client relationships,
+      revenue, and useful things, from SaaS platforms to a self-hosted AI
+      assistant. This is where I keep my writing and my resume.
+    </p>
+    <p style="margin-top: 1.4rem;">
+      <a class="btn" href="/resume/">Resume</a>
+      &nbsp;&nbsp;<a href="/files/resume.pdf" download>Download the PDF ↓</a>
+    </p>
+  </section>
+
+  <hr />
+
+  <section>
+    <h2 style="margin-bottom: 0.8rem;">Writing</h2>
+    <ul class="post-list">
+      {posts.map((p) => (
+        <li>
+          <span class="title">
+            {p.data.type === 'link' ? (
+              <a class="external" href={p.data.link}>{p.data.title}</a>
+            ) : (
+              <a href={`/writing/${p.id}/`}>{p.data.title}</a>
+            )}
+          </span>
+          <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+        </li>
+      ))}
+    </ul>
+    <p style="margin-top: 1rem;"><a href="/writing/">All writing →</a></p>
+  </section>
+</Base>

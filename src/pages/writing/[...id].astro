@@ -1,0 +1,61 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import Figure from '../../components/Figure.astro';
+import Gallery from '../../components/Gallery.astro';
+import PullQuote from '../../components/PullQuote.astro';
+import Video from '../../components/Video.astro';
+import Sticky from '../../components/Sticky.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing', ({ data }) => data.type !== 'link');
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const fmt = post.data.date.toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date.toISOString(),
+  author: { '@type': 'Person', name: 'Dustin Mooney', url: 'https://dustinwmooney.github.io' },
+};
+---
+
+<Base title={`${post.data.title} — Dustin Mooney`} description={post.data.description} ogType="article" jsonLd={jsonLd}>
+  {post.data.accent && <style set:html={`:root { --accent: ${post.data.accent}; }`} />}
+  <article>
+    {post.data.hero && (
+      <div class="hero-bleed">
+        <img src={post.data.hero} alt={post.data.heroAlt ?? ''} loading="eager" />
+      </div>
+    )}
+    <header style={`margin-top: ${post.data.hero ? '2rem' : '3.5rem'};`}>
+      <h1>{post.data.title}</h1>
+      <p class="meta" style="margin-top: 0.7rem;">{fmt}</p>
+    </header>
+    <div class="prose" style="margin-top: 2rem;">
+      <Content components={{ Figure, Gallery, PullQuote, Video, Sticky }} />
+    </div>
+  </article>
+</Base>
+
+<style>
+  /* Full-bleed hero: escapes the column, stays performant (M31.c). */
+  .hero-bleed {
+    margin: 1.5rem calc(50% - 50vw) 0;
+  }
+  .hero-bleed img {
+    width: 100%;
+    max-height: 68vh;
+    object-fit: cover;
+    border-radius: 0;
+  }
+</style>

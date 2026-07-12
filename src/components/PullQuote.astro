@@ -1,0 +1,23 @@
+---
+interface Props { cite?: string }
+const { cite } = Astro.props;
+---
+<aside class="pull">
+  <p><slot /></p>
+  {cite && <footer>— {cite}</footer>}
+</aside>
+<style>
+  .pull {
+    margin: 2.6rem 0;
+    padding: 0.4rem 0;
+    border-top: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--text);
+  }
+  .pull p { margin: 1rem 0; }
+  .pull footer { font-size: 0.95rem; color: var(--text-dim); margin-bottom: 0.8rem; }
+</style>

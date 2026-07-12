@@ -1,0 +1,13 @@
+---
+// Captioned image; bleed="full" escapes the text column (Stamatiou-style).
+interface Props { src: string; alt: string; caption?: string; bleed?: 'full' | 'none' }
+const { src, alt, caption, bleed = 'none' } = Astro.props;
+---
+<figure class={bleed === 'full' ? 'bleed' : ''} style="margin: 2rem 0;">
+  <img src={src} alt={alt} loading="lazy" />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+<style>
+  .bleed { margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
+  .bleed img { border-radius: 0; width: 100%; }
+</style>

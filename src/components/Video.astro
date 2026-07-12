@@ -1,0 +1,18 @@
+---
+// Self-hosted video, muted-autoplay loop by default (hero-style) or controls.
+interface Props { src: string; poster?: string; controls?: boolean; caption?: string; bleed?: 'full' | 'none' }
+const { src, poster, controls = false, caption, bleed = 'none' } = Astro.props;
+---
+<figure class={bleed === 'full' ? 'bleed' : ''} style="margin: 2rem 0;">
+  {controls ? (
+    <video src={src} poster={poster} controls preload="metadata" playsinline />
+  ) : (
+    <video src={src} poster={poster} autoplay muted loop playsinline />
+  )}
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+<style>
+  video { width: 100%; }
+  .bleed { margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
+  .bleed video { border-radius: 0; }
+</style>

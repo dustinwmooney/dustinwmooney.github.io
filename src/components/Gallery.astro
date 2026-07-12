@@ -1,0 +1,16 @@
+---
+// Responsive image grid: pass images=[{src, alt}] and optional columns.
+interface Props { images: { src: string; alt: string }[]; columns?: number; caption?: string }
+const { images, columns = 2, caption } = Astro.props;
+---
+<figure style="margin: 2rem 0;">
+  <div class="grid" style={`grid-template-columns: repeat(${columns}, 1fr);`}>
+    {images.map((im) => <img src={im.src} alt={im.alt} loading="lazy" />)}
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+<style>
+  .grid { display: grid; gap: 10px; }
+  .grid img { width: 100%; height: 100%; object-fit: cover; }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr 1fr !important; } }
+</style>

@@ -1,0 +1,140 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Content mirrors /files/resume.pdf (the canonical download) — update both.
+const jobs = [
+  {
+    role: 'Solutions Strategist, GM Dealer Chat',
+    org: 'General Motors',
+    where: 'Remote',
+    when: '2024–Present',
+    intro:
+      "Strategic alignment of dealership sales objectives with GM's corporate digital chat initiatives — integrating digital performance tools across local, regional, and national dealerships.",
+    points: [
+      'Spearheaded data-driven engagement strategies (market trends, customer behavior, A/B testing) that measurably increased online customer interaction across a multi-platform digital presence.',
+      'Consistently exceeded quota and performance objectives, generating 12% growth within the business unit while directing data-analytics initiatives between corporate and dealerships.',
+    ],
+  },
+  {
+    role: 'Customer Success Manager, Public Sector',
+    org: 'PublicInput',
+    where: 'Remote',
+    when: '2021–2023',
+    intro:
+      'Managed a portfolio of government clients using a public-engagement SaaS platform to gauge community interest on public issues.',
+    points: [
+      'Leveraged platform insights to inform clients like Washington, DC and the Virginia Dept. of Transportation — and to drive cross-selling opportunities.',
+      'Maintained a 91% client retention rate managing relationships from onboarding through renewal.',
+    ],
+  },
+  {
+    role: 'Customer Success Manager',
+    org: 'Client Savvy',
+    where: 'Raleigh, NC',
+    when: '2018–2021',
+    intro:
+      'Worked with a team of client-experience professionals to achieve marketing and client success objectives for professional-services firms.',
+    points: [
+      'Bolstered a 96% renewal rate while generating over $400K in new business year-over-year through upsell opportunities.',
+      'Directed client experience and financial consulting that led to a 23% revenue increase for Faith Technologies while diversifying their portfolio.',
+    ],
+  },
+  {
+    role: 'Manager, Customer Success',
+    org: 'The McClatchy Company',
+    where: 'Raleigh, NC',
+    when: '2017–2018',
+    intro:
+      'Directed a team of 13 Client Success Managers — the liaison between sales, production, and client success for a publicly traded publisher, serving clients like UNC, Republic Wireless, and the Carolina Hurricanes.',
+    points: [
+      'Led the team managing relationships focused on identifying needs, executing campaigns, and reporting success metrics.',
+      'Migrated into a multidisciplinary team with a 43% increase in recurring revenue as success, sales, ad-ops, and operations integrated.',
+    ],
+  },
+  {
+    role: 'Account Director / Senior Account Manager / Account Manager',
+    org: 'IZEA Worldwide',
+    where: 'Orlando, FL',
+    when: '2010–2017',
+    intro:
+      'Increasing accountability at the leader in influencer and content-marketing SaaS, serving Viacom, Ketchum, J.P. Morgan Chase, the US Army, the CDC, and Johnson & Johnson.',
+    points: [
+      'Managed over $7 million annually in marketing initiatives for brands, advocacy organizations, and government agencies.',
+      'Secured over $1.2M annually in new business from clients including NIH and CDC.',
+    ],
+  },
+];
+
+const additional = [
+  { role: 'Consultant', org: 'REBUILD Globally', where: 'Remote & Port-au-Prince, Haiti', when: '2015–2018' },
+  { role: 'Campaign Staffer', org: 'U.S. Senate Campaign', where: 'Phoenix, AZ & Remote', when: '2015–2016' },
+  { role: 'Aid Worker', org: 'International Volunteer HQ (IVHQ)', where: 'Nairobi, Kenya', when: '2013–2014' },
+];
+
+const skills =
+  'Customer Success · Open Source Intelligence (OSINT) · Sales · Marketing · SaaS · Customer Experience (CX) · Data Analytics · Salesforce · HubSpot · Adobe Creative Cloud · Python · R · HTML/CSS · SEO/SEM · WordPress · GitHub';
+---
+
+<Base title="Resume — Dustin Mooney" description="Dustin Mooney — resume. Customer success and strategy leadership across SaaS, publishing, and automotive.">
+  <section style="margin-top: 3.5rem;">
+    <h1>Resume</h1>
+    <p class="meta" style="margin-top: 0.7rem;">
+      Management · Customer Success · Sales · Communications · Open-Source Research &amp; Analysis · Data Analytics
+    </p>
+    <p style="margin-top: 1.1rem;">
+      <a class="btn" href="/files/resume.pdf" download>Download PDF ↓</a>
+    </p>
+  </section>
+
+  <hr />
+
+  <section>
+    <h2>Experience</h2>
+    {jobs.map((j) => (
+      <article style="margin: 2rem 0;">
+        <h3>{j.role}</h3>
+        <p class="meta" style="margin: 0.25rem 0 0.7rem;">
+          {j.org} · {j.where} · {j.when}
+        </p>
+        <p>{j.intro}</p>
+        <ul>
+          {j.points.map((pt) => <li style="margin-bottom: 0.5rem;">{pt}</li>)}
+        </ul>
+      </article>
+    ))}
+  </section>
+
+  <hr />
+
+  <section>
+    <h2>Education &amp; Certifications</h2>
+    <p style="margin-top: 1rem;">
+      <strong>B.A. Political Science</strong> — University of Central Florida, Orlando, FL (2013)
+    </p>
+    <ul>
+      <li>Certified Open-Source Intelligence Professional, The McAfee Institute <span class="pill">in progress</span></li>
+      <li>Google Data Analytics, Google</li>
+    </ul>
+  </section>
+
+  <hr />
+
+  <section>
+    <h2>Additional Experience</h2>
+    <ul class="post-list" style="margin-top: 0.6rem;">
+      {additional.map((a) => (
+        <li>
+          <span class="title">{a.role}, {a.org} <span class="meta">— {a.where}</span></span>
+          <time>{a.when}</time>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <hr />
+
+  <section>
+    <h2>Skills</h2>
+    <p style="margin-top: 0.8rem;" class="meta">{skills}</p>
+  </section>
+</Base>

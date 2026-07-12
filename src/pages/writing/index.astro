@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+---
+
+<Base title="Writing — Dustin Mooney" description="Essays, features, and pointers from Dustin Mooney.">
+  <section style="margin-top: 3.5rem;">
+    <h1>Writing</h1>
+    <p class="meta" style="margin-top: 0.7rem;">
+      Essays and features live here; <span class="external">links</span> point elsewhere.
+      Subscribe by <a href="/rss.xml">RSS</a>.
+    </p>
+  </section>
+  <ul class="post-list" style="margin-top: 2rem;">
+    {posts.map((p) => (
+      <li>
+        <span class="title">
+          {p.data.type === 'link' ? (
+            <a class="external" href={p.data.link}>{p.data.title}</a>
+          ) : (
+            <a href={`/writing/${p.id}/`}>{p.data.title}</a>
+          )}
+          {p.data.type === 'feature' && <span class="pill" style="margin-left: 0.5rem;">feature</span>}
+        </span>
+        <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+      </li>
+    ))}
+  </ul>
+</Base>
