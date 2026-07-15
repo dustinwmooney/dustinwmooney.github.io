@@ -8,7 +8,13 @@ import Video from '../../components/Video.astro';
 import Sticky from '../../components/Sticky.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('writing', ({ data }) => data.type !== 'link');
+  // Drafts render in local dev (for preview) but never build in production —
+  // without this, a draft's page went live and Pagefind indexed it, even
+  // though the lists and RSS hid it.
+  const posts = await getCollection(
+    'writing',
+    ({ data }) => data.type !== 'link' && (!data.draft || !import.meta.env.PROD)
+  );
   return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
 }
 
