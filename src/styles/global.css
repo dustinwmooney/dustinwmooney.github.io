@@ -131,11 +131,18 @@ blockquote {
 
 /* Site chrome */
 .site-nav {
-  display: flex; align-items: baseline; gap: 1.4rem;
+  display: flex; align-items: center; gap: 1.4rem;
   padding: 1.6rem 0 0;
   font-size: 0.95rem;
 }
-.site-nav .brand { font-family: var(--serif); font-weight: 700; font-size: 1.05rem; color: var(--text); margin-right: auto; }
+.site-nav .brand {
+  font-family: var(--serif); font-weight: 700; font-size: 1.05rem; color: var(--text);
+  margin-right: auto;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+/* The M mark is white-on-transparent; invert to black when the light theme is on. */
+.site-nav .brand .mark { height: 22px; width: auto; display: block; }
+:root[data-theme='light'] .site-nav .brand .mark { filter: invert(1); }
 .site-nav a:not(.brand) { color: var(--text-dim); }
 .site-nav a:hover { color: var(--accent); text-decoration: none; }
 .site-nav a[aria-current='page'] { color: var(--text); font-weight: 600; }
