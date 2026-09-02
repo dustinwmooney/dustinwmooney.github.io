@@ -9,7 +9,7 @@ type: essay
 
 *Happy belated Mother’s Day to all the moms out there. Source: Unsplash.*
 
-This past Sunday was Mother’s Day. Normally, I use Dustin’s Dispatch to talk politics, culture, and whatever fresh chaos the news cycle is feeding us. But once in a while, it’s worth setting all of that aside to talk about one of the people who made it possible for me to have an opinion about anything in the first place.
+This past Sunday was Mother’s Day. Normally, I write about politics, culture, and whatever fresh chaos the news cycle is feeding us. But once in a while, it’s worth setting all of that aside to talk about one of the people who made it possible for me to have an opinion about anything in the first place.
 
 For this piece, my mother will remain nameless. Not because she’s mysterious, but because she’s every bit as familiar as she is extraordinary.
 
