@@ -23,6 +23,7 @@ const { Content } = await render(post);
 const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 const xUrl = 'https://x.com/intent/tweet?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent(post.data.title);
 const liUrl = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl);
+const fbUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl);
 const mailUrl = 'mailto:?subject=' + encodeURIComponent(post.data.title) + '&body=' + encodeURIComponent(shareUrl);
 const fmt = post.data.date.toLocaleDateString('en-US', {
   month: 'long',
@@ -60,6 +61,7 @@ const jsonLd = {
             <button type="button" role="menuitem" data-share="copy">Copy link</button>
             <a role="menuitem" href={xUrl} target="_blank" rel="noopener">Share on X</a>
             <a role="menuitem" href={liUrl} target="_blank" rel="noopener">Share on LinkedIn</a>
+            <a role="menuitem" href={fbUrl} target="_blank" rel="noopener">Share on Facebook</a>
             <a role="menuitem" href={mailUrl}>Email a link</a>
             <button type="button" role="menuitem" data-share="native" hidden>More…</button>
           </span>
