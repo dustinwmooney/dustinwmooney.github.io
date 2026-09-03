@@ -20,6 +20,10 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
+const xUrl = 'https://x.com/intent/tweet?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent(post.data.title);
+const liUrl = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl);
+const mailUrl = 'mailto:?subject=' + encodeURIComponent(post.data.title) + '&body=' + encodeURIComponent(shareUrl);
 const fmt = post.data.date.toLocaleDateString('en-US', {
   month: 'long',
   day: 'numeric',
@@ -45,7 +49,22 @@ const jsonLd = {
     )}
     <header style={`margin-top: ${post.data.hero ? '2rem' : '3.5rem'};`}>
       <h1>{post.data.title}</h1>
-      <p class="meta" style="margin-top: 0.7rem;">{fmt}</p>
+      <p class="byline mono" style="margin-top: 0.8rem;">
+        <time datetime={post.data.date.toISOString()}>{fmt}</time>
+        <span class="dot" aria-hidden="true">·</span>
+        <span>Dustin Mooney</span>
+        <span class="dot" aria-hidden="true">·</span>
+        <span class="share">
+          <button type="button" class="share-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="share-menu">Share <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <span id="share-menu" class="share-menu" role="menu" hidden>
+            <button type="button" role="menuitem" data-share="copy">Copy link</button>
+            <a role="menuitem" href={xUrl} target="_blank" rel="noopener">Share on X</a>
+            <a role="menuitem" href={liUrl} target="_blank" rel="noopener">Share on LinkedIn</a>
+            <a role="menuitem" href={mailUrl}>Email a link</a>
+            <button type="button" role="menuitem" data-share="native" hidden>More…</button>
+          </span>
+        </span>
+      </p>
     </header>
     <div class="prose" style="margin-top: 2rem;">
       <Content components={{ Figure, Gallery, PullQuote, Video, Sticky }} />
@@ -65,3 +84,41 @@ const jsonLd = {
     border-radius: 0;
   }
 </style>
+
+<style>
+  .byline { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem; }
+  .byline .dot { color: var(--text-dim); }
+  .share { position: relative; display: inline-block; }
+  .share-btn { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 0.3rem; }
+  .share-btn:hover, .share-btn[aria-expanded='true'] { color: var(--text); }
+  .share-menu { position: absolute; left: 0; top: calc(100% + 0.5rem); z-index: 5; min-width: 12rem; background: var(--card); border: 1px solid var(--rule); padding: 0.35rem; display: grid; gap: 2px; }
+  .share-menu[hidden] { display: none; }
+  .share-menu a, .share-menu button { font: inherit; color: var(--text); text-decoration: none; text-align: left; background: none; border: 0; padding: 0.55rem 0.7rem; cursor: pointer; }
+  .share-menu a:hover, .share-menu button:hover { background: var(--accent); color: var(--on-accent); }
+</style>
+
+<script is:inline>
+  (function () {
+    const btn = document.querySelector('.share-btn');
+    const menu = document.getElementById('share-menu');
+    if (!btn || !menu) return;
+    const url = location.href;
+    const title = document.title;
+    const native = menu.querySelector('[data-share="native"]');
+    if (navigator.share && native) native.hidden = false;
+    function close() { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
+    btn.addEventListener('click', () => {
+      const open = menu.hidden;
+      menu.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+    menu.querySelector('[data-share="copy"]').addEventListener('click', async (e) => {
+      try { await navigator.clipboard.writeText(url); e.target.textContent = 'Copied'; setTimeout(() => { e.target.textContent = 'Copy link'; close(); }, 900); }
+      catch { prompt('Copy this link:', url); }
+    });
+    native?.addEventListener('click', () => { navigator.share({ title, url }).catch(() => {}); close(); });
+    menu.addEventListener('click', (e) => { if (e.target.tagName === 'A') close(); });
+    document.addEventListener('click', (e) => { if (!menu.hidden && !e.target.closest('.share')) close(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  })();
+</script>
