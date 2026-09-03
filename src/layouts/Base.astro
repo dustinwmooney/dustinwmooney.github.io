@@ -1,5 +1,7 @@
 ---
-// Base layout: icon rail on desktop (Stamatiou-style), top bar on mobile.
+// Base layout: the 2026-09 blend — sticky toolbar (M box + bar) on every page,
+// mobile drawer behind the M, shared footer. Post pages use this too and keep
+// their own reading structure inside <main>.
 import '../styles/global.css';
 
 interface Props {
@@ -7,12 +9,14 @@ interface Props {
   description?: string;
   ogType?: string;
   jsonLd?: Record<string, unknown>;
+  wide?: boolean;
 }
 const {
   title,
   description = 'Dustin Mooney — customer success and strategy leader. Writing on work, technology, and building things.',
   ogType = 'website',
   jsonLd,
+  wide = false,
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const path = Astro.url.pathname;
@@ -28,11 +32,11 @@ const person = {
   worksFor: { '@type': 'Organization', name: 'General Motors' },
 };
 
-const nav = [
-  { href: '/', label: 'Home', icon: 'M3 11.5 12 4l9 7.5M5.5 9.5V20h13V9.5' },
-  { href: '/writing/', label: 'Writing', icon: 'M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17v3ZM14 7l3 3' },
-  { href: '/about/', label: 'About', icon: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0' },
-  { href: '/resume/', label: 'Resume', icon: 'M7 3h7l4 4v14H7V3Zm7 0v4h4M10 12h5M10 16h5' },
+const menu = [
+  { href: '/#now', label: 'Now' },
+  { href: '/writing/', label: 'Writing' },
+  { href: '/#projects', label: 'Projects' },
+  { href: '/about/', label: 'About' },
 ];
 ---
 
@@ -44,9 +48,13 @@ const nav = [
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/icon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="alternate" type="application/rss+xml" title="Dustin Mooney — Writing" href="/rss.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Geist+Mono:wght@400;500&display=swap" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={ogType} />
@@ -72,87 +80,99 @@ const nav = [
     </script>
   </head>
   <body>
-    <aside class="rail" aria-label="Site navigation">
-      {nav.map((n) => (
-        <a href={n.href} aria-current={at(n.href)} title={n.label}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d={n.icon} />
-          </svg>
-          <span class="sr">{n.label}</span>
+    <div class="barwrap">
+      <div class="barrow">
+        <a class="markbox" id="markbox" href="/" aria-label="Home" aria-controls="drawer" aria-expanded="false">
+          <img src="/logo-mark.png" alt="" width="96" height="71" />
         </a>
-      ))}
-      <button class="search-open" onclick="openSearch()" title="Search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="6.5" /><path d="m20 20-4.4-4.4" />
-        </svg>
-        <span class="sr">Search</span>
-      </button>
-      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M20 13A8 8 0 1 1 11 4a6.5 6.5 0 0 0 9 9Z" />
-        </svg>
-        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="4.5" /><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M4.7 4.7l1.8 1.8M17.5 17.5l1.8 1.8M19.3 4.7l-1.8 1.8M6.5 17.5l-1.8 1.8" />
-        </svg>
-        <span class="sr">Toggle theme</span>
-      </button>
-    </aside>
-    <div class="wrap">
-      <nav class="site-nav">
-        <a class="brand" href="/">
-          <img class="mark" src="/logo-mark.png" alt="" width="96" height="71" />
-          <span>Dustin Mooney</span>
-        </a>
-        <a href="/writing/" aria-current={at('/writing/')}>Writing</a>
-        <a href="/about/" aria-current={at('/about/')}>About</a>
-        <a href="/resume/" aria-current={at('/resume/')}>Resume</a>
-        <button class="search-open nav-toggle" onclick="openSearch()" title="Search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="6.5" /><path d="m20 20-4.4-4.4" />
-          </svg>
-          <span class="sr">Search</span>
-        </button>
-        <button class="theme-toggle nav-toggle" onclick="toggleTheme()" title="Toggle theme">
-          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20 13A8 8 0 1 1 11 4a6.5 6.5 0 0 0 9 9Z" />
-          </svg>
-          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="4.5" /><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M4.7 4.7l1.8 1.8M17.5 17.5l1.8 1.8M19.3 4.7l-1.8 1.8M6.5 17.5l-1.8 1.8" />
-          </svg>
-          <span class="sr">Toggle theme</span>
-        </button>
+        <div class="bar">
+          <nav class="menu" aria-label="Site">
+            {menu.map((m) => (
+              <a href={m.href} aria-current={m.href.startsWith('/#') ? undefined : at(m.href)}>{m.label}</a>
+            ))}
+          </nav>
+          <a class="brand" href="/">Dustin Mooney</a>
+          <div class="right">
+            <button class="tool search-open" onclick="openSearch()" title="Search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" /><path d="m20 20-4.4-4.4" />
+              </svg>
+              <span class="sr">Search</span>
+            </button>
+            <button class="tool theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+              <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" />
+              </svg>
+              <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.5" /><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M4.7 4.7l1.8 1.8M17.5 17.5l1.8 1.8M19.3 4.7l-1.8 1.8M6.5 17.5l-1.8 1.8" />
+              </svg>
+              <span class="sr">Toggle theme</span>
+            </button>
+            <a class="cta" href="/resume/">Resume</a>
+          </div>
+        </div>
+      </div>
+      <nav class="drawer" id="drawer" hidden aria-label="Site, mobile">
+        {menu.map((m) => <a href={m.href}>{m.label}</a>)}
+        <a href="/resume/">Resume</a>
       </nav>
+    </div>
+
+    <div class={wide ? 'wide' : 'wrap'}>
       <main data-pagefind-body>
         <slot />
       </main>
       <footer class="site-footer">
-        <span>© 2026 Dustin Mooney</span>
-        <a href="/rss.xml">RSS</a>
-        <a href="mailto:dustin@dustinmooney.com">Email</a>
-        <a href="https://linkedin.com/in/dustinmooney">LinkedIn</a>
+        <div class="row">
+          <div>
+            <div class="id"><img src="/logo-mark.png" alt="" width="96" height="71" />Dustin Mooney</div>
+            <p class="tag">Customer success by day. Building tools by night.</p>
+          </div>
+          <nav aria-label="Footer">
+            <a href="/#now">Now</a>
+            <a href="/writing/">Writing</a>
+            <a href="/#work">Work</a>
+            <a href="/#projects">Projects</a>
+            <a href="/#connect">Connect</a>
+            <a href="/rss.xml">RSS</a>
+          </nav>
+        </div>
+        <p class="mono meta">© 2026 Dustin Mooney · Built with Astro, hosted on GitHub Pages</p>
       </footer>
     </div>
 
     <div id="search-overlay" hidden>
       <div class="search-backdrop" onclick="closeSearch()"></div>
       <div class="search-box" role="dialog" aria-modal="true" aria-label="Search the site">
-        <input
-          id="search-input"
-          type="search"
-          placeholder="Search writing, about, resume…"
-          autocomplete="off"
-          spellcheck="false"
-        />
+        <input id="search-input" type="search" placeholder="Search writing, about, resume…" autocomplete="off" spellcheck="false" />
         <ol id="search-results"></ol>
         <p id="search-status" class="search-status"></p>
       </div>
     </div>
     <script is:inline>
+      // Mobile drawer: below 860px the M box is the menu button.
+      (function () {
+        const box = document.getElementById('markbox');
+        const drawer = document.getElementById('drawer');
+        const mq = window.matchMedia('(max-width: 860px)');
+        function close() { drawer.hidden = true; box.setAttribute('aria-expanded', 'false'); }
+        box.addEventListener('click', (e) => {
+          if (!mq.matches) return;
+          e.preventDefault();
+          const open = drawer.hidden;
+          drawer.hidden = !open;
+          box.setAttribute('aria-expanded', String(open));
+        });
+        drawer.addEventListener('click', (e) => { if (e.target.tagName === 'A') close(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+        document.addEventListener('click', (e) => { if (!drawer.hidden && !e.target.closest('.barwrap')) close(); });
+        mq.addEventListener('change', (m) => { if (!m.matches) close(); });
+      })();
+
       // Site search: Pagefind indexes the built site; this lazy-loads the
       // index on first open, so pages carry zero search JS until asked.
       let pagefind = null;
       let searchSeq = 0;
-
       function openSearch() {
         const overlay = document.getElementById('search-overlay');
         overlay.hidden = false;
@@ -162,7 +182,6 @@ const nav = [
         document.getElementById('search-overlay').hidden = true;
         document.getElementById('search-input').blur();
       }
-
       addEventListener('keydown', (e) => {
         const overlay = document.getElementById('search-overlay');
         if (e.key === 'Escape' && !overlay.hidden) closeSearch();
@@ -172,36 +191,24 @@ const nav = [
           overlay.hidden ? openSearch() : closeSearch();
         }
       });
-
       document.getElementById('search-input').addEventListener('input', async (e) => {
         const q = e.target.value.trim();
         const list = document.getElementById('search-results');
         const status = document.getElementById('search-status');
         const seq = ++searchSeq;
-        if (!q) {
-          list.innerHTML = '';
-          status.textContent = '';
-          return;
-        }
+        if (!q) { list.innerHTML = ''; status.textContent = ''; return; }
         try {
-          if (!pagefind) {
-            pagefind = await import('/pagefind/pagefind.js');
-            await pagefind.init();
-          }
+          if (!pagefind) { pagefind = await import('/pagefind/pagefind.js'); await pagefind.init(); }
         } catch {
           status.textContent = 'Search is being indexed — try again after the next publish.';
           return;
         }
         const res = await pagefind.debouncedSearch(q);
-        if (!res || seq !== searchSeq) return; // superseded by newer keystrokes
+        if (!res || seq !== searchSeq) return;
         const hits = await Promise.all(res.results.slice(0, 8).map((r) => r.data()));
         if (seq !== searchSeq) return;
         list.innerHTML = hits
-          .map(
-            (h) =>
-              `<li><a href="${h.url}"><strong>${h.meta?.title ?? h.url}</strong>` +
-              `<span>${h.excerpt}</span></a></li>`
-          )
+          .map((h) => `<li><a href="${h.url}"><strong>${h.meta?.title ?? h.url}</strong><span>${h.excerpt}</span></a></li>`)
           .join('');
         status.textContent = hits.length ? '' : `Nothing found for “${q}”.`;
       });

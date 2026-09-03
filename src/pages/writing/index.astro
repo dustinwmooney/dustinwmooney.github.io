@@ -7,10 +7,10 @@ const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 const fmt = (d: Date) =>
-  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 ---
 
-<Base title="Writing — Dustin Mooney" description="Essays, features, and pointers from Dustin Mooney.">
+<Base title="Writing — Dustin Mooney" description="Essays, features, and pointers from Dustin Mooney." wide>
   <section style="margin-top: 3.5rem;">
     <h1>Writing</h1>
     <p class="meta" style="margin-top: 0.7rem;">
@@ -18,20 +18,14 @@ const fmt = (d: Date) =>
       Subscribe by <a href="/rss.xml">RSS</a>.
     </p>
   </section>
-  <ul class="post-list" style="margin-top: 2rem;">
+  <div class="grid3" style="margin-top: 2.2rem;">
     {posts.map((p) => (
-      <li>
-        <span class="title">
-          {p.data.type === 'link' ? (
-            <a class="external" href={p.data.link}>{p.data.title}</a>
-          ) : (
-            <a href={`/writing/${p.id}/`}>{p.data.title}</a>
-          )}
-          {p.data.type === 'feature' && <span class="pill" style="margin-left: 0.5rem;">feature</span>}
-        </span>
-        <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
-      </li>
+      <a class="card" href={p.data.type === 'link' ? p.data.link : `/writing/${p.id}/`}>
+        <h3>{p.data.title}{p.data.type === 'feature' && <span class="tag-pill" style="margin-left: 0.5rem;">feature</span>}</h3>
+        <p>{p.data.description}</p>
+        <span class="mono when">{fmt(p.data.date)}{p.data.type === 'link' && ' ↗'}</span>
+      </a>
     ))}
-  </ul>
+  </div>
   <Subscribe />
 </Base>

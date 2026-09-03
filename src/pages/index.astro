@@ -1,53 +1,122 @@
 ---
 import Base from '../layouts/Base.astro';
 import Subscribe from '../components/Subscribe.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import { jobs } from '../data/resume';
 
 const posts = (await getCollection('writing', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 6);
+  .slice(0, 3);
+const notes = (await getCollection('now')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const rendered = await Promise.all(notes.map(async (n) => ({ ...n, Content: (await render(n)).Content })));
+const newest = notes[0]?.data.date;
 
-const fmt = (d: Date) =>
-  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const day = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+const monthYear = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const full = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 ---
 
-<Base title="Dustin Mooney">
-  <section style="margin-top: 4.5rem;">
+<Base title="Dustin Mooney" wide>
+  <section class="hero">
     <h1>Dustin Mooney</h1>
-    <!-- BIO PLACEHOLDER — Dustin is sending real copy; everything below this
-         line in this block gets replaced verbatim when it arrives. -->
-    <p class="meta" style="max-width: 36rem; margin-top: 1.1rem; font-size: 1.05rem;">
-      Customer success and strategy leader — currently a Solutions Strategist at
-      General Motors. A decade and a half of building client relationships,
-      revenue, and useful things, from SaaS platforms to a self-hosted AI
-      assistant. This is where I keep my writing and my resume.
-    </p>
-    <p style="margin-top: 1.4rem;">
-      <a class="btn" href="/resume/">Resume</a>
-      &nbsp;&nbsp;<a href="/files/resume.pdf" download>Download the PDF ↓</a>
-    </p>
+    <span class="mono roleline">Solutions Strategist, General Motors</span>
+    <p class="intro">Fifteen years in customer success across SaaS, publishing, government, and automotive. Currently building a self-hosted AI assistant and an app for open models, and reading toward the place where technology meets national security.</p>
+    <p class="actions"><a class="btn" href="#work">See the work</a><a class="quiet" href="/files/resume.pdf" download>Download the PDF</a></p>
   </section>
 
-  <hr />
+  {rendered.length > 0 && (
+    <section class="section" id="now">
+      <h2 class="section-h">Now <span class="mono">updated {monthYear(newest)}</span></h2>
+      <div class="now">
+        {rendered.map((n) => (
+          <article><span class="mono">{day(n.data.date)}</span><div class="note"><n.Content /></div></article>
+        ))}
+      </div>
+    </section>
+  )}
 
-  <section>
-    <h2 style="margin-bottom: 0.8rem;">Writing</h2>
-    <ul class="post-list">
+  <section class="section" id="writing">
+    <h2 class="section-h">Writing <span class="mono"><a href="/writing/">all writing</a></span></h2>
+    <div class="grid3">
       {posts.map((p) => (
-        <li>
-          <span class="title">
-            {p.data.type === 'link' ? (
-              <a class="external" href={p.data.link}>{p.data.title}</a>
-            ) : (
-              <a href={`/writing/${p.id}/`}>{p.data.title}</a>
-            )}
-          </span>
-          <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
-        </li>
+        <a class="card" href={p.data.type === 'link' ? p.data.link : `/writing/${p.id}/`}>
+          <h3>{p.data.title}</h3>
+          <p>{p.data.description}</p>
+          <span class="mono when">{full(p.data.date)}</span>
+        </a>
       ))}
-    </ul>
-    <p style="margin-top: 1rem;"><a href="/writing/">All writing →</a></p>
+    </div>
   </section>
 
-  <Subscribe />
+  <section class="section" id="work">
+    <h2 class="section-h">Work <span class="mono">2010 to present</span></h2>
+    <div class="grid2">
+      {jobs.map((j) => (
+        <a class="card" href="/resume/">
+          <span class="mono">{j.org}</span>
+          <h3>{j.role.split(' / ')[0]}</h3>
+          <p>{j.card}</p>
+          <span class="mono when">{j.short}</span>
+        </a>
+      ))}
+      <a class="card" href="/resume/#additional">
+        <span class="mono">Earlier</span>
+        <h3>Haiti, Kenya, and a Senate campaign</h3>
+        <p>Consultant for REBUILD Globally, aid worker with IVHQ, campaign staff on a U.S. Senate race.</p>
+        <span class="mono when">2013 to 2018</span>
+      </a>
+    </div>
+    <p class="actions" style="margin-top: 1.6rem;"><a class="btn" href="/files/resume.pdf" download>Download the PDF</a><a class="quiet" href="/resume/">Full resume</a></p>
+  </section>
+
+  <section class="section" id="projects">
+    <h2 class="section-h">Projects</h2>
+    <div class="grid2">
+      <a class="card" href="https://projectmerlin.app">
+        <div class="cover"></div>
+        <h3>Merlin</h3>
+        <p>A self-hosted AI chief of staff. Email, calendar, research, phone, and Signal on a server I control.</p>
+        <span class="mono when">2026, in daily use</span>
+      </a>
+      <div class="card">
+        <div class="cover alt"></div>
+        <h3>Open Sesame</h3>
+        <p>Chat with open models on Mac and iPhone. Pay for what you use, no subscription.</p>
+        <span class="mono when">2026, in development</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="connect">
+    <h2 class="section-h">Connect</h2>
+    <div class="connect">
+      <ul>
+        <li><a href="mailto:dustin@dustinmooney.com">Email</a></li>
+        <li><a href="https://linkedin.com/in/dustinmooney">LinkedIn</a></li>
+        <li><a href="https://github.com/dustinwmooney">GitHub</a></li>
+      </ul>
+      <Subscribe heading="Occasional notes" blurb="What I'm building and reading. No schedule, no spam." />
+    </div>
+  </section>
 </Base>
+
+<style>
+  .hero { padding: 5.5rem 0 0.75rem; max-width: 44rem; }
+  .hero h1 { margin: 0 0 0.9rem; text-wrap: balance; }
+  .hero .roleline { display: block; margin: 0 0 1.6rem; }
+  .hero .intro { font-size: 1.3rem; line-height: 1.5; margin: 0 0 1.9rem; }
+  .now { display: grid; gap: 1.25rem; max-width: 44rem; }
+  .now article { display: grid; grid-template-columns: 96px 1fr; gap: 1rem; align-items: baseline; }
+  .now .note :global(p) { margin: 0; }
+  .connect { display: grid; grid-template-columns: 1fr 1.4fr; gap: 2.5rem; align-items: start; max-width: 56rem; }
+  .connect ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; font-size: 1.15rem; }
+  .connect ul a { text-decoration: none; border-bottom: 1px solid var(--rule); }
+  .connect ul a:hover { border-color: var(--text); }
+  .connect :global(.subscribe) { margin-top: 0; }
+  @media (max-width: 860px) {
+    .hero { padding-top: 3.5rem; }
+    .hero .intro { font-size: 1.15rem; }
+    .now article { grid-template-columns: 1fr; gap: 0.25rem; }
+    .connect { grid-template-columns: 1fr; }
+  }
+</style>

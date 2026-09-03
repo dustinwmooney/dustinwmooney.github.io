@@ -20,4 +20,11 @@ const writing = defineCollection({
   }),
 });
 
-export const collections = { writing };
+// "Now": short dated notes for the homepage. One file per note; the body is
+// the note. Newest first on the page. Empty collection = section hidden.
+const now = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/now' }),
+  schema: z.object({ date: z.coerce.date() }),
+});
+
+export const collections = { writing, now };
