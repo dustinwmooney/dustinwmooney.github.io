@@ -8,7 +8,7 @@
 
 - [Home](https://dustinwmooney.github.io/): bio and recent writing
 - [Resume](https://dustinwmooney.github.io/resume/): full experience, education, skills
-- [Resume PDF](https://dustinwmooney.github.io/files/resume.pdf): canonical downloadable resume
+- [Resume PDF](https://dustinwmooney.github.io/files/Dustin-Mooney-Resume-2026.pdf): canonical downloadable resume
 - [Writing](https://dustinwmooney.github.io/writing/): all essays, features, and links
 - [RSS](https://dustinwmooney.github.io/rss.xml): machine-readable feed of all writing
 

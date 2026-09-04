@@ -1,4 +1,4 @@
-// Single source of truth for resume content. Mirrors /files/resume.pdf (the
+// Single source of truth for resume content. Mirrors /files/Dustin-Mooney-Resume-2026.pdf (the
 // canonical download) — update both. Used by /resume/ and the homepage Work grid.
 export const jobs = [
   {

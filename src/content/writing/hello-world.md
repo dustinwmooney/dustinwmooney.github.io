@@ -11,6 +11,6 @@ said elsewhere.
 
 It's a static site, built simply on purpose: fast to load, easy to read, and
 owned entirely by me. The [resume](/resume/) is always current, and there's a
-[PDF copy](/files/resume.pdf) if you need one for the usual reasons.
+[PDF copy](/files/Dustin-Mooney-Resume-2026.pdf) if you need one for the usual reasons.
 
 More soon.
