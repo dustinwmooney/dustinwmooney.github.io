@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+// The archive: every published post, newest first, grouped by year.
+const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const years = [...new Set(posts.map((p) => p.data.date.getUTCFullYear()))];
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+const href = (p: (typeof posts)[number]) => (p.data.type === 'link' ? p.data.link : `/writing/${p.id}/`);
+---
+
+<Base title="Archive — Dustin Mooney" description="Every post Dustin Mooney has published, in one list.">
+  <section style="margin-top: 3.5rem;">
+    <h1>Archive</h1>
+    <p class="meta" style="margin-top: 0.7rem;">
+      Everything published here, newest first. {posts.length} {posts.length === 1 ? 'post' : 'posts'}.
+      Subscribe by <a href="/rss.xml">RSS</a>.
+    </p>
+  </section>
+
+  {years.map((y) => (
+    <section class="year">
+      <h2 class="mono year-h">{y}</h2>
+      <ul class="archive">
+        {posts.filter((p) => p.data.date.getUTCFullYear() === y).map((p) => (
+          <li>
+            <span class="mono when">{fmt(p.data.date)}</span>
+            <span class="entry">
+              <a href={href(p)}>{p.data.title}{p.data.type === 'link' && ' ↗'}</a>
+              {p.data.type === 'feature' && <span class="tag-pill">feature</span>}
+              <span class="desc">{p.data.description}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</Base>
+
+<style>
+  .year { margin-top: 2.6rem; }
+  .year-h { font-size: 0.8rem; letter-spacing: 0.12em; color: var(--text-dim); padding-bottom: 0.6rem; border-bottom: 1px solid var(--rule); margin: 0; }
+  .archive { list-style: none; margin: 0; padding: 0; }
+  .archive li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+  .archive .when { padding-top: 0.2rem; }
+  .entry { display: grid; gap: 0.25rem; }
+  .entry a { font-size: 1.2rem; font-weight: 500; text-decoration: none; }
+  .entry a:hover { color: var(--accent); }
+  .entry .tag-pill { justify-self: start; }
+  .desc { color: var(--text-dim); font-size: 0.95rem; line-height: 1.5; }
+  @media (max-width: 600px) {
+    .archive li { grid-template-columns: 1fr; gap: 0.3rem; }
+  }
+</style>
