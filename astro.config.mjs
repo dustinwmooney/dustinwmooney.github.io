@@ -6,6 +6,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://dustinwmooney.github.io',
   integrations: [mdx(), sitemap()],
+  redirects: { '/writings': '/writing/archive' },
   markdown: {
     shikiConfig: { theme: 'github-dark-dimmed' },
   },

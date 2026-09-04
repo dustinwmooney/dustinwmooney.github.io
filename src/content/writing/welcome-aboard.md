@@ -1,7 +1,7 @@
 ---
 title: "Welcome Aboard. Read at Your Own Risk."
 description: "Nobody asked, but here I am. What this site is, what it isn’t, and what you’ll find if you stick around."
-date: 2026-05-01
+date: 2026-04-01
 type: essay
 ---
 

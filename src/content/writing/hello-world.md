@@ -3,6 +3,7 @@ title: "Hello, world"
 description: "Why this site exists, and what will show up here."
 date: 2026-07-11
 type: essay
+draft: true
 ---
 
 This site is where my writing lives — essays on customer success and strategy,
