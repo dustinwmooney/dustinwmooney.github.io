@@ -1,6 +1,5 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Subscribe from '../../components/Subscribe.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
@@ -29,5 +28,4 @@ const fmt = (d: Date) =>
       </a>
     ))}
   </div>
-  <Subscribe />
 </Base>

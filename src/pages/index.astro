@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import Subscribe from '../components/Subscribe.astro';
 import { getCollection, render } from 'astro:content';
 import { jobs } from '../data/resume';
 
@@ -95,7 +94,6 @@ const full = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: '
         <li><a href="https://linkedin.com/in/dustinmooney">LinkedIn</a></li>
         <li><a href="https://github.com/dustinwmooney">GitHub</a></li>
       </ul>
-      <Subscribe heading="Occasional notes" blurb="What I'm building and reading. No schedule, no spam." />
     </div>
   </section>
 </Base>
