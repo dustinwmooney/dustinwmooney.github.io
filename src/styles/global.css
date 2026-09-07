@@ -105,7 +105,7 @@ blockquote {
 .bar .tool { width: 38px; height: 38px; border-radius: 8px; border: 0; padding: 0; background: color-mix(in srgb, var(--bar-fg) 10%, transparent); color: var(--bar-fg); display: grid; place-items: center; cursor: pointer; }
 .bar .tool:hover { background: var(--accent); color: var(--on-accent); }
 .bar .tool svg { width: 18px; height: 18px; }
-.bar .cta { text-decoration: none; color: var(--bar); background: var(--bar-fg); border-radius: 8px; padding: 9px 14px; font-family: var(--serif); font-weight: 500; font-size: 0.95rem; }
+.bar .cta { text-decoration: none; color: var(--bar); background: var(--bar-fg); border-radius: 8px; padding: 10px 14px; font-family: var(--mono); font-weight: 500; font-size: 0.8rem; letter-spacing: 0.02em; }
 .bar .cta:hover { background: var(--accent); color: var(--on-accent); }
 .drawer { max-width: var(--wide); margin: 8px auto 0; border-radius: 14px; background: var(--bar); color: var(--bar-fg); padding: 8px; display: grid; gap: 2px; }
 .drawer[hidden] { display: none; }
