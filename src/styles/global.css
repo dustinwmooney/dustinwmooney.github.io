@@ -88,7 +88,10 @@ blockquote {
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ── Toolbar: the M box + the bar (the only rounded things on the site) ── */
-.barwrap { position: sticky; top: 0; z-index: 20; padding: 1.5rem 1.5rem 0; background: linear-gradient(var(--bg) 70%, transparent); }
+/* 100px of air above the bar at rest (Dustin, 2026-09-07); it is margin, not
+   padding, so the bar still hugs the top edge once it sticks while scrolling. */
+.barwrap { position: sticky; top: 0; z-index: 20; margin-top: 100px; padding: 0.75rem 1.5rem 0; background: linear-gradient(var(--bg) 70%, transparent); }
+@media (max-width: 860px) { .barwrap { margin-top: 56px; } }
 .barrow { max-width: var(--wide); margin: 0 auto; display: flex; gap: 8px; align-items: stretch; }
 .markbox { width: 58px; height: 58px; border-radius: 14px; background: var(--bar); display: grid; place-items: center; flex: none; text-decoration: none; }
 .markbox:hover, .markbox[aria-expanded='true'] { background: var(--accent); }
