@@ -141,6 +141,7 @@ a.card:hover { outline: 1.5px solid var(--accent); outline-offset: -1.5px; text-
 .card p { margin: 0; color: var(--text-dim); font-size: 1rem; line-height: 1.5; }
 .card .when { margin-top: auto; padding-top: 12px; }
 .cover { height: 110px; margin: -22px -22px 12px; background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 25%, var(--card))); }
+img.cover { display: block; width: calc(100% + 44px); max-width: none; object-fit: cover; object-position: center; }
 .cover.alt { background: linear-gradient(135deg, color-mix(in srgb, var(--text) 70%, var(--card)), color-mix(in srgb, var(--text) 20%, var(--card))); }
 @media (max-width: 860px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
 
