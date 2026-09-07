@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Subscribe from '../../components/Subscribe.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
@@ -9,9 +10,9 @@ const fmt = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 ---
 
-<Base title="Writings — Dustin Mooney" description="Essays, features, and pointers from Dustin Mooney." wide>
+<Base title="Writing — Dustin Mooney" description="Essays, features, and pointers from Dustin Mooney." wide>
   <section style="margin-top: 3.5rem;">
-    <h1>Writings</h1>
+    <h1>Writing</h1>
     <p class="meta" style="margin-top: 0.9rem; max-width: 44rem;">
       Essays on customer success, business strategy, and what it actually takes to put AI to work, with the
       occasional detour into whatever I'm reading or building. Longer pieces and features live here;
@@ -28,4 +29,5 @@ const fmt = (d: Date) =>
       </a>
     ))}
   </div>
+  <Subscribe />
 </Base>

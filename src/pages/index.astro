@@ -35,7 +35,7 @@ const full = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: '
   )}
 
   <section class="section" id="writing">
-    <h2 class="section-h">Writing <span class="mono"><a href="/writing/">all writing</a></span></h2>
+    <h2 class="section-h">Writings <span class="mono"><a href="/writing/">all writings</a></span></h2>
     <div class="grid3">
       {posts.map((p) => (
         <a class="card" href={p.data.type === 'link' ? p.data.link : `/writing/${p.id}/`}>

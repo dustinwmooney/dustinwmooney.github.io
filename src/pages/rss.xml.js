@@ -7,7 +7,7 @@ export async function GET(context) {
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
   );
   return rss({
-    title: 'Dustin Mooney — Writing',
+    title: 'Dustin Mooney — Writings',
     description: 'Essays, features, and pointers from Dustin Mooney.',
     site: context.site,
     items: posts.map((p) => ({
