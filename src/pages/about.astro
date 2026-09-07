@@ -143,7 +143,7 @@ import Base from '../layouts/Base.astro';
   ];
 
   const state = {
-    palette: 1,
+    palette: 0, // default = Gameboy '89 (Dustin, 2026-09-07)
     original: false,
     type: 'diffusion' as 'bayer' | 'diffusion',
     matrix: 8,
@@ -237,7 +237,7 @@ import Base from '../layouts/Base.astro';
     b.style.setProperty('--s', `linear-gradient(135deg, ${pal.dark} 50%, ${pal.light} 50%)`);
     b.style.background = `linear-gradient(135deg, ${pal.dark} 50%, ${pal.light} 50%)`;
     b.title = pal.name;
-    if (idx === 1) b.classList.add('on');
+    if (idx === 0) b.classList.add('on');
     b.addEventListener('click', () => {
       state.palette = idx;
       state.original = false;
@@ -261,7 +261,7 @@ import Base from '../layouts/Base.astro';
     nameEl.textContent = 'Original';
   });
   chipsBox.appendChild(orig);
-  nameEl.textContent = PALETTES[1].name;
+  nameEl.textContent = PALETTES[0].name;
 
   // gear + controls
   document.getElementById('labGear')!.addEventListener('click', () => {
