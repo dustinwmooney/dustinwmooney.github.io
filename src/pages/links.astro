@@ -1,0 +1,61 @@
+---
+// Links — the go.mooney.me page. One column of the links people need most,
+// in the site's skin. go.mooney.me forwards here. Order = most-asked first.
+import Base from '../layouts/Base.astro';
+
+const links = [
+  { href: '/meet/',                                   label: 'Book a meeting',   note: 'Pick a time, get a video link' },
+  { href: 'mailto:hello@dustinmooney.com',            label: 'Email',            note: 'hello@dustinmooney.com' },
+  { href: '/resume/',                                 label: 'Resume',           note: 'Web version, with the PDF' },
+  { href: '/writing/',                                label: 'Writing',          note: 'Essays and notes' },
+  { href: 'https://linkedin.com/in/dustinmooney',     label: 'LinkedIn',         note: 'linkedin.com/in/dustinmooney', ext: true },
+  { href: 'https://projectmerlin.app',                label: 'Merlin',           note: 'The self-hosted AI chief of staff', ext: true },
+  { href: 'https://github.com/dustinwmooney',         label: 'GitHub',           note: 'github.com/dustinwmooney', ext: true },
+  { href: 'https://signal.me/@ValiantFighter.27',     label: 'Signal',           note: 'Message me directly', ext: true },
+  { href: 'https://instagram.com/thedustinmooney',    label: 'Instagram',        note: '@thedustinmooney', ext: true },
+];
+---
+
+<Base title="Links — Dustin Mooney" description="The short list: how to reach Dustin Mooney and where to find his work.">
+  <section class="head">
+    <img class="mark" src="/logo-mark.svg" alt="" width="96" height="68" />
+    <h1>Dustin Mooney</h1>
+    <span class="mono roleline">Customer Success · Business Strategy · Management · Artificial Intelligence</span>
+  </section>
+
+  <ul class="links">
+    {links.map((l) => (
+      <li>
+        <a href={l.href} rel={l.ext ? 'me noopener' : undefined}>
+          <span class="label">{l.label}{l.ext && <span class="ext"> ↗</span>}</span>
+          <span class="mono note">{l.note}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <p class="mono home">This is <a href="https://go.mooney.me">go.mooney.me</a>. The full site is <a href="/">dustinmooney.com</a>.</p>
+</Base>
+
+<style>
+  .head { margin-top: 3.5rem; text-align: center; }
+  .head .mark { width: 44px; height: auto; margin-bottom: 1rem; }
+  :root[data-theme='light'] .head .mark { filter: invert(1); }
+  .head h1 { margin: 0 0 0.6rem; }
+  .head .roleline { display: block; }
+  .links { list-style: none; margin: 2.5rem auto 0; padding: 0; max-width: 34rem; display: grid; gap: 0.75rem; }
+  .links a {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+    background: var(--card); border: 1px solid var(--rule); padding: 1rem 1.2rem;
+    text-decoration: none; transition: border-color 0.15s ease;
+  }
+  .links a:hover { border-color: var(--accent); }
+  .links .label { font-size: 1.2rem; font-weight: 500; }
+  .links .ext { color: var(--text-dim); font-size: 0.85em; }
+  .links .note { text-align: right; }
+  .home { text-align: center; margin: 2.5rem 0 0; }
+  @media (max-width: 600px) {
+    .links a { flex-direction: column; gap: 0.15rem; }
+    .links .note { text-align: left; }
+  }
+</style>

@@ -1,0 +1,35 @@
+---
+// Meet — the booking page. Cal.com inline embed (thedustinm/meet) skinned to
+// the site: follows the site theme, accent = the Graeber yellow. meet.mooney.me
+// forwards here. Plain link fallback if the embed script is blocked.
+import Base from '../layouts/Base.astro';
+const calLink = 'thedustinm/meet';
+---
+
+<Base title="Meet — Dustin Mooney" description="Book time with Dustin Mooney.">
+  <section class="head">
+    <h1>Let's talk</h1>
+    <p class="meta">Pick a time that works for you. Video link arrives with the calendar invite.</p>
+    <p class="mono fallback">Embed not loading? <a href={`https://cal.com/${calLink}`}>Open the booking page directly ↗</a></p>
+  </section>
+
+  <div id="cal-inline" class="cal"></div>
+
+  <script is:inline define:vars={{ calLink }}>
+    (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+    const theme = () => (document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
+    const brand = { light: { 'cal-brand': '#fcb900' }, dark: { 'cal-brand': '#fcb900' } };
+    Cal('init', 'meet', { origin: 'https://app.cal.com' });
+    Cal.ns.meet('inline', { elementOrSelector: '#cal-inline', calLink, config: { layout: 'month_view', theme: theme() } });
+    Cal.ns.meet('ui', { theme: theme(), cssVarsPerTheme: brand, hideEventTypeDetails: false, layout: 'month_view' });
+    addEventListener('themechange', () => Cal.ns.meet('ui', { theme: theme(), cssVarsPerTheme: brand }));
+  </script>
+</Base>
+
+<style>
+  .head { margin-top: 3.5rem; }
+  .head h1 { margin-bottom: 0.6rem; }
+  .head .meta { margin: 0 0 0.4rem; }
+  .fallback { margin: 0; }
+  .cal { margin-top: 1.5rem; min-height: 40rem; width: 100%; overflow: auto; }
+</style>
