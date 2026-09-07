@@ -90,8 +90,8 @@ blockquote {
 /* ── Toolbar: the M box + the bar (the only rounded things on the site) ── */
 /* 100px of air above the bar at rest (Dustin, 2026-09-07); it is margin, not
    padding, so the bar still hugs the top edge once it sticks while scrolling. */
-.barwrap { position: sticky; top: 0; z-index: 20; margin-top: 50px; padding: calc(0.75rem + 25px) 1.5rem 0; background: linear-gradient(var(--bg) 70%, transparent); }
-@media (max-width: 860px) { .barwrap { margin-top: 16px; } }
+.barwrap { position: sticky; top: 0; z-index: 20; margin-top: 6px; padding: calc(0.75rem + 25px) 1.5rem 0; background: linear-gradient(var(--bg) 70%, transparent); }
+@media (max-width: 860px) { .barwrap { margin-top: 0; } }
 .barrow { max-width: var(--wide); margin: 0 auto; display: flex; gap: 8px; align-items: stretch; }
 .markbox { width: 58px; height: 58px; border-radius: 14px; background: var(--bar); display: grid; place-items: center; flex: none; text-decoration: none; }
 .markbox:hover, .markbox[aria-expanded='true'] { background: var(--accent); }
