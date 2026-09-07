@@ -6,11 +6,11 @@
 
 ## Pages
 
-- [Home](https://dustinwmooney.github.io/): bio and recent writing
-- [Resume](https://dustinwmooney.github.io/resume/): full experience, education, skills
-- [Resume PDF](https://dustinwmooney.github.io/files/Dustin-Mooney-Resume-2026.pdf): canonical downloadable resume
-- [Writing](https://dustinwmooney.github.io/writing/): all essays, features, and links
-- [RSS](https://dustinwmooney.github.io/rss.xml): machine-readable feed of all writing
+- [Home](https://dustinmooney.com/): bio and recent writing
+- [Resume](https://dustinmooney.com/resume/): full experience, education, skills
+- [Resume PDF](https://dustinmooney.com/files/Dustin-Mooney-Resume-2026.pdf): canonical downloadable resume
+- [Writing](https://dustinmooney.com/writing/): all essays, features, and links
+- [RSS](https://dustinmooney.com/rss.xml): machine-readable feed of all writing
 
 ## Contact
 
