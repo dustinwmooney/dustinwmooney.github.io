@@ -26,7 +26,7 @@ const links = [
 
   <section class="formwrap" id="form">
     <h2 class="section-h">Send a message</h2>
-    <p class="meta">All five fields help me get back to you properly. Phone is only used if you'd rather I call.</p>
+    <p class="meta">The name, email, subject, and message fields help me get back to you properly. Phone is only used if you'd rather I call.</p>
     <p class="sent mono" id="sent" hidden>Thanks, your message is on its way. I'll be in touch.</p>
     <form action="https://formsubmit.co/dustin@dustinmooney.com" method="POST" class="contact">
       <input type="hidden" name="_subject" value="New message from dustinmooney.com" />
@@ -41,6 +41,7 @@ const links = [
         <label>Email<input type="email" name="Email" autocomplete="email" required /></label>
         <label>Phone number<input type="tel" name="Phone" autocomplete="tel" /></label>
       </div>
+      <label>Subject<input type="text" name="Subject" required /></label>
       <label>Message<textarea name="Message" rows="7" required></textarea></label>
       <p class="actions"><button class="btn" type="submit">Send</button></p>
     </form>
