@@ -132,11 +132,11 @@ const menu = [
             <a href="/writing/archive/">Archive</a>
             <a href="/#work">Work</a>
             <a href="/#projects">Projects</a>
-            <a href="/#connect">Connect</a>
+            <a href="/connect/">Connect</a>
             <a href="/rss.xml">RSS</a>
           </nav>
         </div>
-        <p class="mono meta copyright">© 2026 Dustin Mooney. All rights reserved.</p>
+        <p class="mono meta copyright">Copyright © 2026 Dustin Mooney. All rights reserved.</p>
       </footer>
     </div>
 
@@ -149,6 +149,10 @@ const menu = [
       </div>
     </div>
     <script is:inline>
+      // Every external link opens in a new tab (Dustin, 2026-09-07).
+      document.querySelectorAll('a[href^="http"]').forEach((a) => {
+        if (a.hostname && a.hostname !== location.hostname) { a.target = '_blank'; a.rel = 'noopener'; }
+      });
       // Mobile drawer: below 860px the M box is the menu button.
       (function () {
         const box = document.getElementById('markbox');

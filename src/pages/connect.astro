@@ -1,0 +1,79 @@
+---
+// Connect — the ways to reach Dustin, plus a contact form. The form posts to
+// FormSubmit (formsubmit.co), which relays to dustin@dustinmooney.com; the
+// first submission triggers a one-time activation email to that address.
+import Base from '../layouts/Base.astro';
+const links = [
+  { href: 'mailto:dustin@dustinmooney.com',        label: 'Email',    note: 'dustin@dustinmooney.com' },
+  { href: '/meet/',                                label: 'Book a meeting', note: 'Pick a time on my calendar' },
+  { href: 'https://linkedin.com/in/dustinmooney',  label: 'LinkedIn', note: 'linkedin.com/in/dustinmooney' },
+  { href: 'https://github.com/dustinwmooney',      label: 'GitHub',   note: 'github.com/dustinwmooney' },
+  { href: 'https://signal.me/@ValiantFighter.27',  label: 'Signal',   note: 'For anything that should stay private' },
+];
+---
+
+<Base title="Connect — Dustin Mooney" description="Get in touch with Dustin Mooney.">
+  <section class="head">
+    <h1>Connect</h1>
+    <p class="intro">I'd like to hear from you. Whether it's a question, a project, an idea worth arguing about, or you just want to say hello, reach out. Pick whichever way suits you, or use the form below and I'll reply by email, usually within a day or two.</p>
+  </section>
+
+  <ul class="ways">
+    {links.map((l) => (
+      <li><a href={l.href}><span class="label">{l.label}</span><span class="mono note">{l.note}</span></a></li>
+    ))}
+  </ul>
+
+  <section class="formwrap" id="form">
+    <h2 class="section-h">Send a message</h2>
+    <p class="meta">All five fields help me get back to you properly. Phone is only used if you'd rather I call.</p>
+    <p class="sent mono" id="sent" hidden>Thanks, your message is on its way. I'll be in touch.</p>
+    <form action="https://formsubmit.co/dustin@dustinmooney.com" method="POST" class="contact">
+      <input type="hidden" name="_subject" value="New message from dustinmooney.com" />
+      <input type="hidden" name="_next" value="https://dustinmooney.com/connect/?sent=1" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+      <div class="row">
+        <label>First name<input type="text" name="First name" autocomplete="given-name" required /></label>
+        <label>Last name<input type="text" name="Last name" autocomplete="family-name" required /></label>
+      </div>
+      <div class="row">
+        <label>Email<input type="email" name="Email" autocomplete="email" required /></label>
+        <label>Phone number<input type="tel" name="Phone" autocomplete="tel" /></label>
+      </div>
+      <label>Message<textarea name="Message" rows="7" required></textarea></label>
+      <p class="actions"><button class="btn" type="submit">Send</button></p>
+    </form>
+  </section>
+
+  <script is:inline>
+    if (new URLSearchParams(location.search).get('sent') === '1') {
+      document.getElementById('sent').hidden = false;
+      document.querySelector('form.contact').hidden = true;
+      document.getElementById('form').scrollIntoView();
+    }
+  </script>
+</Base>
+
+<style>
+  .head { margin-top: 3.5rem; }
+  .head h1 { margin-bottom: 0.9rem; }
+  .head .intro { font-size: 1.2rem; line-height: 1.55; max-width: 40rem; margin: 0; }
+  .ways { list-style: none; margin: 2.2rem 0 0; padding: 0; display: grid; gap: 0.6rem; }
+  .ways a { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; background: var(--card); border: 1px solid var(--rule); padding: 0.85rem 1.1rem; text-decoration: none; }
+  .ways a:hover { border-color: var(--accent); }
+  .ways .label { font-size: 1.1rem; font-weight: 500; }
+  .ways .note { text-align: right; }
+  .formwrap { margin-top: 4rem; }
+  .formwrap .meta { margin: -0.6rem 0 1.4rem; }
+  .contact { display: grid; gap: 1rem; }
+  .contact .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .contact label { display: grid; gap: 0.35rem; font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-dim); }
+  .contact input, .contact textarea { font: inherit; font-family: var(--serif); font-size: 1.05rem; color: var(--text); background: var(--card); border: 1px solid var(--rule); padding: 0.65rem 0.8rem; width: 100%; }
+  .contact input:focus, .contact textarea:focus { outline: none; border-color: var(--accent); }
+  .contact textarea { resize: vertical; min-height: 9rem; }
+  .contact .actions { margin: 0.4rem 0 0; }
+  .contact .btn { border: 0; cursor: pointer; font: inherit; font-family: var(--serif); font-size: 1.05rem; padding: 0.7rem 1.6rem; }
+  .sent { margin: 0 0 1.4rem; padding: 0.9rem 1.1rem; background: var(--accent-soft); color: var(--text); font-size: 0.9rem; }
+  @media (max-width: 600px) { .contact .row { grid-template-columns: 1fr; } .ways a { flex-direction: column; gap: 0.15rem; } .ways .note { text-align: left; } }
+</style>
