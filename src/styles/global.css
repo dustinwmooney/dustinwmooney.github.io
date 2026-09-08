@@ -155,6 +155,7 @@ img.cover { display: block; width: calc(100% + 44px); max-width: none; object-fi
 .site-footer nav a { text-decoration: none; color: var(--text-dim); font-family: var(--mono); font-size: 0.8rem; }
 .site-footer nav a:hover { color: var(--text); }
 .site-footer .meta { margin-top: 1.6rem; }
+.site-footer .copyright { text-align: center; font-size: 0.72rem; margin-top: 2.2rem; }
 /* The M mark is white-on-transparent; invert outside the dark bar when light. */
 :root[data-theme='light'] .site-footer .id img { filter: invert(1); }
 
