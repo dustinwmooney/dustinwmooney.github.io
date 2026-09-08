@@ -1,6 +1,6 @@
 ---
 // Connect — the ways to reach Dustin, plus a contact form. The form posts to
-// FormSubmit (formsubmit.co), which relays to dustin@dustinmooney.com; the
+// FormSubmit (formsubmit.co) via the hashed alias for dustin@dustinmooney.com; the
 // first submission triggers a one-time activation email to that address.
 import Base from '../layouts/Base.astro';
 const links = [
@@ -28,7 +28,7 @@ const links = [
     <h2 class="section-h">Send a message</h2>
     <p class="meta">The name, email, subject, and message fields help me get back to you properly. Phone is only used if you'd rather I call.</p>
     <p class="sent mono" id="sent" hidden>Thanks, your message is on its way. I'll be in touch.</p>
-    <form action="https://formsubmit.co/dustin@dustinmooney.com" method="POST" class="contact">
+    <form action="https://formsubmit.co/6bb7eb80eff5ff0d3fa728a084fd2a3a" method="POST" class="contact">
       <input type="hidden" name="_subject" value="New message from dustinmooney.com" />
       <input type="hidden" name="_next" value="https://dustinmooney.com/connect/?sent=1" />
       <input type="hidden" name="_template" value="table" />
