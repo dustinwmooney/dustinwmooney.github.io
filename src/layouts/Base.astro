@@ -136,7 +136,8 @@ const menu = [
             <a href="/rss.xml">RSS</a>
           </nav>
         </div>
-        <p class="mono meta copyright">Copyright © 2026 Dustin Mooney. All rights reserved.</p>
+        <p class="mono meta copyright">Copyright ©<span id="year">{new Date().getFullYear()}</span> Dustin Mooney. All rights reserved.</p>
+        <script is:inline>document.getElementById('year').textContent = new Date().getFullYear();</script>
       </footer>
     </div>
 

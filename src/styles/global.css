@@ -147,11 +147,11 @@ img.cover { display: block; width: calc(100% + 44px); max-width: none; object-fi
 
 /* ── Footer ── */
 .site-footer { margin-top: 7rem; border-top: 1px solid var(--rule); padding: 2.2rem 0 3.5rem; }
-.site-footer .row { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.site-footer .row { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
 .site-footer .id { display: flex; align-items: center; gap: 12px; font-size: 1.1rem; font-weight: 500; }
 .site-footer .id img { width: 26px; height: auto; }
 .site-footer .tag { margin: 0.5rem 0 0; color: var(--text-dim); max-width: 28rem; }
-.site-footer nav { display: flex; gap: 22px; flex-wrap: wrap; }
+.site-footer nav { display: flex; gap: 22px; flex-wrap: wrap; align-items: center; }
 .site-footer nav a { text-decoration: none; color: var(--text-dim); font-family: var(--mono); font-size: 0.8rem; }
 .site-footer nav a:hover { color: var(--text); }
 .site-footer .meta { margin-top: 1.6rem; }
