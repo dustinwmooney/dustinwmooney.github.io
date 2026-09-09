@@ -62,12 +62,18 @@ const menu = [
     <meta name="twitter:card" content="summary" />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd ?? person)} />
     <script is:inline>
-      // Theme, applied before paint. Explicit choice wins; the site defaults
-      // to DARK otherwise (Dustin, 2026-07-12) — OS preference no longer read.
+      // Theme, applied before paint. An explicit toggle choice wins; otherwise
+      // the visitor's device setting decides (Dustin, 2026-09-09), and the
+      // page follows live if that setting changes while it is open.
       (function () {
-        const mode = localStorage.getItem('theme') ?? 'dark';
-        document.documentElement.dataset.theme = mode;
-        document.documentElement.classList.toggle('dark-active', mode === 'dark');
+        const mq = matchMedia('(prefers-color-scheme: dark)');
+        const apply = () => {
+          const mode = localStorage.getItem('theme') ?? (mq.matches ? 'dark' : 'light');
+          document.documentElement.dataset.theme = mode;
+          document.documentElement.classList.toggle('dark-active', mode === 'dark');
+        };
+        apply();
+        mq.addEventListener('change', () => { if (!localStorage.getItem('theme')) { apply(); dispatchEvent(new CustomEvent('themechange')); } });
       })();
       function toggleTheme() {
         const dark = !document.documentElement.classList.contains('dark-active');
