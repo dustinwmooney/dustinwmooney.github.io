@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://dustinmooney.com',
+  site: 'https://www.dustinmooney.com',
   integrations: [mdx(), sitemap()],
   redirects: { '/writings': '/writing/archive' },
   markdown: {
