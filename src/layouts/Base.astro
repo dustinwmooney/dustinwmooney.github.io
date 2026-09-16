@@ -84,6 +84,20 @@ const menu = [
         dispatchEvent(new CustomEvent('themechange'));
       }
     </script>
+    <!-- Analytics: all three run cookieless (Dustin, 2026-09-16). GA4 uses Consent
+         Mode with storage denied; Clarity has cookies off at the project level;
+         Cloudflare's beacon never sets cookies. -->
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' });
+      gtag('js', new Date());
+      gtag('config', 'G-VLSKKP1KMP');
+    </script>
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-VLSKKP1KMP"></script>
+    <script is:inline>
+      (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "yj51mhwxf3");
+    </script>
   </head>
   <body>
     <div class="barwrap">
@@ -223,5 +237,6 @@ const menu = [
         status.textContent = hits.length ? '' : `Nothing found for “${q}”.`;
       });
     </script>
+    <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "9869e5205580435e9bd1b90873d0b654"}'></script>
   </body>
 </html>
